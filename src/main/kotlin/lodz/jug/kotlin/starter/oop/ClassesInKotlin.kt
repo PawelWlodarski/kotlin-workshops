@@ -14,6 +14,9 @@ fun main(args: Array<String>) {
     val userJava: UserJava = UserJava("George", 20)
     Displayer.section("userJava.name", userJava.name)
 
+    val userKotlin:UserKotlin = UserKotlin("GeorgeKotlin", 20)
+    Displayer.section("userKotlin.name", userKotlin.name)
+
 
     Displayer.title("secondary constructor")
     val withSecondary = UserTwoConstructors("George")
@@ -31,6 +34,7 @@ fun main(args: Array<String>) {
     account.addMessage("new message 3")
 
     Displayer.section("Stevens account messages", account.getMessages())
+    Displayer.section("Stevens account size property", account.numberOfMessage)
 }
 
 
@@ -62,6 +66,12 @@ class UserWithInit(val name: String, val city: String) {
 
 class SocialMediaAccount(val name: String, var wall: String, friends: List<String>) {
     private var messages: List<String> = java.util.LinkedList()
+
+    //property example - feature unique for Kotlin
+    // show what happen when messages.size is asigned directly to field
+    val numberOfMessage:Int
+        get() = messages.size
+
 
     //can not use  '=' syntax - not expression
     fun addMessage(m: String) {
