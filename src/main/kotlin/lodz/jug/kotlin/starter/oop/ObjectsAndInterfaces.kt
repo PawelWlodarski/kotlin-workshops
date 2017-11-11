@@ -17,13 +17,20 @@ fun main(args: Array<String>) {
     Displayer.title("Objects")
 
     val factored: KotlinInterface = FactoryExample.factoryMethod("factoryExample")
-    Displayer.section("factored : ",factored.toJson())
+    Displayer.section("factored",factored.toJson())
 
     val factoredInfix: KotlinInterface = FactoryExample infixFactory "infixExample"
-    Displayer.section("infix : ",factoredInfix.toJson())
+    Displayer.section("infix",factoredInfix.toJson())
 
     val fromPrivateConstructor = ThirdImplementation.instance("privateConstructor")
-    Displayer.section("private : ",fromPrivateConstructor.toJson())
+    Displayer.section("private",fromPrivateConstructor.toJson())
+
+
+
+    Displayer.title("Properties in interfaces")
+    val fourthImplementation=FourthImplementation("4th value")
+    Displayer.section("4th toJson",fourthImplementation.toJson())
+    Displayer.section("4th toJsonTrim",fourthImplementation.trimmedJson)
 
 }
 
@@ -41,11 +48,13 @@ interface KotlinInterface {
     fun toJson():String
 }
 
+
 class SecondImplementation(val value:String) : KotlinInterface{
     override fun toJson(): String = """{"secondValue" : '$value'}"""
-
-
 }
+
+
+
 
 object FactoryExample{
     fun factoryMethod(v:String):KotlinInterface = SecondImplementation(v)
@@ -59,4 +68,15 @@ class ThirdImplementation private constructor(val v: String) : KotlinInterface{
     }
 
     override fun toJson(): String = """{"thirdValue" : '$v'}"""
+}
+
+interface KotlinInterfaceWithPreoperty {
+    fun toJson():String
+
+    val trimmedJson:String
+        get() = toJson().trim()
+}
+
+class FourthImplementation(val value:String) : KotlinInterface, KotlinInterfaceWithPreoperty{
+    override fun toJson(): String = """              {"secondValue" : '$value'}       """
 }
