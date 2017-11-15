@@ -22,6 +22,9 @@ fun main(args: Array<String>) {
     val factoredInfix: KotlinInterface = FactoryExample infixFactory "infixExample"
     Displayer.section("infix",factoredInfix.toJson())
 
+    val factoredInvoke=FactoryExample("invoke Example")
+    Displayer.section("invoke",factoredInvoke.toJson())
+
     val fromPrivateConstructor = ThirdImplementation.instance("privateConstructor")
     Displayer.section("private",fromPrivateConstructor.toJson())
 
@@ -59,6 +62,7 @@ class SecondImplementation(val value:String) : KotlinInterface{
 object FactoryExample{
     fun factoryMethod(v:String):KotlinInterface = SecondImplementation(v)
     infix fun infixFactory(v:String):KotlinInterface = SecondImplementation(v)
+    operator fun invoke(v:String):KotlinInterface = SecondImplementation(v)
 }
 
 
