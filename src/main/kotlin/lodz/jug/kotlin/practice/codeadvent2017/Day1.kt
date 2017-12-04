@@ -6,8 +6,9 @@ import io.kotlintest.properties.headers
 import io.kotlintest.properties.row
 import io.kotlintest.properties.table
 import io.kotlintest.specs.WordSpec
+import lodz.jug.kotlin.practice.codeadvent2017.AdventExtensions.asDigit
 
-fun captcha(buildMatchingPairs : (List<Int>) -> List<Int> ) : (String) -> Int = {input ->
+private fun captcha(buildMatchingPairs : (List<Int>) -> List<Int> ) : (String) -> Int = {input ->
     val digits=input. map { it.asDigit()}
 
     digits.zip(buildMatchingPairs(digits))
@@ -15,14 +16,12 @@ fun captcha(buildMatchingPairs : (List<Int>) -> List<Int> ) : (String) -> Int = 
             .sum()
 }
 
-val nextCaptcha= captcha { it.drop(1) + it.take(1) }
-val halfWayCaptcha= captcha {
+private val nextCaptcha= captcha { it.drop(1) + it.take(1) }
+private val halfWayCaptcha= captcha {
     val halfSize=it.size/2
     it.drop(halfSize) + it.take(halfSize)
 }
 
-
-fun Char.asDigit() = Integer.parseInt(this.toString())
 
 
 class CaptchaTest :WordSpec(){
