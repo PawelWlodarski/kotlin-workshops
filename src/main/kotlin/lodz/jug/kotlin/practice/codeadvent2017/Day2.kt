@@ -7,19 +7,37 @@ import io.kotlintest.properties.row
 import io.kotlintest.properties.table
 import io.kotlintest.specs.WordSpec
 import kategory.andThen
+import org.funktionale.collections.tail
 
+typealias LineProgram = (String) -> Int
 
-private fun checksum(input:String):Int=
-    input.split("\n")
-                .map(lineProgram)
-                .sum()
+private fun runChecksumProgram(program:LineProgram):(String) -> Int={
+    it.split("\n")
+            .map(program)
+            .sum()
+}
 
 
 private fun splitOnWhitespaces(s:String) : List<String> = s.split("\\s+".toRegex())
 private fun toNumbers(l:List<String>) : List<Int> = l.map{it.toInt()}
-private val unsafeDifference: (List<Int>) -> Int = { it.max()!! - it.min()!! }
+private val minMAxDifference: (List<Int>) -> Int = { it.max()!! - it.min()!! }
+private val sortNumbers:(List<Int>) -> (List<Int>) = {it.sorted().reversed()}
+private tailrec fun dividersDifference(l:List<Int>):  Int {
+    val head = l.first()
+    val tail = l.tail()
+    val candidate = tail.find { head % it == 0 }
+    return when(candidate){
+        null -> dividersDifference(tail)
+        else -> head / candidate
+    }
+}
 
-private val lineProgram = ::splitOnWhitespaces andThen ::toNumbers andThen unsafeDifference
+private val minMaxProgram: (s: String) -> Int = ::splitOnWhitespaces andThen ::toNumbers andThen minMAxDifference
+private val dividersProgram: (s: String) -> Int =
+        ::splitOnWhitespaces andThen ::toNumbers andThen sortNumbers andThen ::dividersDifference
+
+
+
 
 class Day2Tests : WordSpec(){
     init {
@@ -32,7 +50,7 @@ class Day2Tests : WordSpec(){
             )
 
             forAll(lines){line,result ->
-                lineProgram(line) shouldBe result
+                minMaxProgram(line) shouldBe result
             }
         }
 
@@ -41,10 +59,23 @@ class Day2Tests : WordSpec(){
                     "7 5 3\n" +
                     "2 4 6 8"
 
-            checksum(input) shouldBe 18
+            runChecksumProgram(minMaxProgram)(input) shouldBe 18
         }
 
-        "my checksum" {
+        "dividers line program properly counts difference"{
+            val lines=table(
+                    headers("line","checksum"),
+                    row("5 9 2 8",4),
+                    row("9 4 7 3",3),
+                    row("3 8 6 5",2)
+            )
+
+            forAll(lines){line,result ->
+                dividersProgram(line) shouldBe result
+            }
+        }
+
+        "my checksum " {
             val input="157\t564\t120\t495\t194\t520\t510\t618\t244\t443\t471\t473\t612\t149\t506\t138\n" +
                     "1469\t670\t47\t604\t1500\t238\t1304\t1426\t54\t749\t1218\t1409\t60\t51\t1436\t598\n" +
                     "578\t184\t2760\t3057\t994\t167\t2149\t191\t2913\t2404\t213\t1025\t1815\t588\t2421\t3138\n" +
@@ -62,7 +93,7 @@ class Day2Tests : WordSpec(){
                     "2837\t2747\t2856\t426\t72\t78\t2361\t96\t2784\t2780\t98\t2041\t2444\t1267\t2167\t2480\n" +
                     "411\t178\t4263\t4690\t3653\t162\t3201\t4702\t3129\t2685\t3716\t147\t3790\t4888\t79\t165"
 
-            println(checksum(input))
+            println(runChecksumProgram(dividersProgram)(input))
 
         }
     }
