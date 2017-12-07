@@ -5,4 +5,6 @@ object AdventExtensions{
     fun String.splitWhitespace() = this.split("\\s+".toRegex())
     fun String.lines()= this.split("\n")
     fun Int.pow2():Int = Math.pow(this.toDouble(),2.0).toInt()
+
+    fun IntArray.indexOfMax()= this.indexOf(this.max()!!)
 }
