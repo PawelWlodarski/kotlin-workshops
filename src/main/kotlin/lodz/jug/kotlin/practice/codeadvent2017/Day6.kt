@@ -6,23 +6,51 @@ import io.kotlintest.properties.headers
 import io.kotlintest.properties.row
 import io.kotlintest.properties.table
 import io.kotlintest.specs.WordSpec
-import java.util.*
-import  lodz.jug.kotlin.practice.codeadvent2017.AdventExtensions.splitWhitespace
+import kategory.Option
+import kategory.Option.None
+import kategory.Option.Some
+import kategory.getOrElse
+import lodz.jug.kotlin.practice.codeadvent2017.AdventExtensions.splitWhitespace
+import lodz.jug.kotlin.practice.codeadvent2017.AdventExtensions.valueHash
 
-fun startRedistribution(registers: IntArray):Int{
-    var distributionHistory= setOf<Int>()
-    fun thereIsNoeRepeatition(it: IntArray): Boolean {
-        return if (distributionHistory.contains(Arrays.hashCode(it))) false
+class DistributionState{
+    private var distributionHistory= setOf<Int>()
+    private var repeated:Option<Int> = None
+
+    fun thereIsNoRepeatition(it: IntArray): Boolean {
+        return if (distributionHistory.contains(it.valueHash())) {
+            repeated=Some(it.valueHash())
+            false
+        }
         else {
-            distributionHistory += Arrays.hashCode(it)
+            distributionHistory += it.valueHash()
             true
         }
     }
 
+    val repeatedElement:Int
+            get()=  repeated.getOrElse { throw RuntimeException("it's only an exercise") }
+}
+
+fun startRedistribution(registers: IntArray):Int{
+    val state=DistributionState()
+
     return generateSequence(registers,::redistribute)
-            .takeWhile (::thereIsNoeRepeatition)
+            .takeWhile {registers->state.thereIsNoRepeatition(registers)}
             .count()
 }
+
+
+fun countCycles(registers: IntArray):Int{
+    val state=DistributionState()
+
+    val fromBeginignToCycle=generateSequence(registers,::redistribute)
+            .takeWhile {registers->state.thereIsNoRepeatition(registers)}.toList()
+
+    return fromBeginignToCycle.map{it.valueHash()}.dropWhile { it != state.repeatedElement}.count()
+}
+
+
 
 
 fun redistribute(registers: IntArray): IntArray {
@@ -63,10 +91,22 @@ class RedistributionTest : WordSpec() {
             startRedistribution(input) shouldBe 5
         }
 
+        "find cycle length"{
+            val input=intArrayOf(0, 2, 7, 0)
+
+            countCycles(input) shouldBe 4
+        }
+
         "part1" {
             val input="5\t1\t10\t0\t1\t7\t13\t14\t3\t12\t8\t10\t7\t12\t0\t6".splitWhitespace()
                     .map { it.toInt() }.toIntArray()
             println(startRedistribution(input))
+        }
+
+        "part2" {
+            val input="5\t1\t10\t0\t1\t7\t13\t14\t3\t12\t8\t10\t7\t12\t0\t6".splitWhitespace()
+                    .map { it.toInt() }.toIntArray()
+            println(countCycles(input))
         }
     }
 }
