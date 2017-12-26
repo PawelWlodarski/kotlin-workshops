@@ -74,6 +74,11 @@ fun main(args: Array<String>) {
 
     Displayer.section("value",value)
     Displayer.section("nullValue",nullValue)
+
+
+    Displayer.section("value safe upper case",value.safeCall { it.toUpperCase() })
+    Displayer.section("nullValue safe upper case",nullValue.safeCall { it.toUpperCase() })
+
 }
 
 sealed abstract class NullUnion{
