@@ -78,7 +78,6 @@ fun main(args: Array<String>) {
 
     Displayer.section("value safe upper case",value.safeCall { it.toUpperCase() })
     Displayer.section("nullValue safe upper case",nullValue.safeCall { it.toUpperCase() })
-
 }
 
 sealed abstract class NullUnion{
@@ -102,3 +101,30 @@ object NullValue : NullUnion(){
     override fun toString(): String ="NullValue"
 
 }
+
+/**
+ *
+ * QUESTIONS
+ *
+ * **************************1)
+which line displays description if it is present or text "NO DESCRIPTION"
+
+class Product(val name:String,val price:Int,val description:String?)
+
+val p = Product("PC",200,null)
+
+a) p :? "NO DESCRIPTION"
+b) p?.description?.or("NO DESCRIPTION")
+c) p?.description ?: "NO DESCRIPTION"
+
+ * **************************2)
+ val n:Any = "123"
+ ???{     //what needs to be here istead of '???'
+    println(n.toInt())
+ }
+
+ * **************************3)
+ - which type is more similar to lang.java.object ?
+ a) Any
+ b) Any?
+**/

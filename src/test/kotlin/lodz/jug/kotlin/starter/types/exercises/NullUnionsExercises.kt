@@ -10,7 +10,7 @@ class NullUnionsAnswers : StringSpec() {
             NullSafeStringJoiner.join(null, "hello", null) shouldBe "Hello"
             NullSafeStringJoiner.join("[", null, "]") shouldBe "[]"
             NullSafeStringJoiner.join("[", "   HELLO   ", "]") shouldBe "[Hello]"
-        }
+        }.config(enabled = false)
 
         "custom union type" {
             val hello = NullUnion.of("  hello  ")
@@ -18,7 +18,7 @@ class NullUnionsAnswers : StringSpec() {
 
             hello.safeCall { it.trim() }.safeCall { it.toLowerCase().capitalize() }.unsafeGet() shouldBe "Hello"
             helloNull.safeCall { it.trim() }.elvis({ it.toLowerCase().capitalize() }, "empty") shouldBe "empty"
-        }
+        }.config(enabled = false)
     }
 }
 
@@ -41,11 +41,11 @@ sealed abstract class NullUnion {
 
 
 class NonNullValue(private val v: String) : NullUnion() {
-    override fun unsafeGet(): String = TODO()
+    override fun unsafeGet(): String = TODO()  // EXERCISE
 
-    override fun elvis(call: (String) -> String, alternative: String): String = TODO()
+    override fun elvis(call: (String) -> String, alternative: String): String = TODO() // EXERCISE
 
-    override fun safeCall(call: (String) -> String): NullUnion = TODO()
+    override fun safeCall(call: (String) -> String): NullUnion = TODO() // EXERCISE
     override fun toString(): String {
         return "NonNullValue(v='$v')"
     }
@@ -53,11 +53,11 @@ class NonNullValue(private val v: String) : NullUnion() {
 }
 
 object NullValue : NullUnion() {
-    override fun unsafeGet(): String = TODO()
+    override fun unsafeGet(): String = TODO() // EXERCISE
 
-    override fun elvis(call: (String) -> String, alternative: String): String = TODO()
+    override fun elvis(call: (String) -> String, alternative: String): String = TODO() // EXERCISE
 
-    override fun safeCall(call: (String) -> String): NullUnion = TODO()
+    override fun safeCall(call: (String) -> String): NullUnion = TODO() // EXERCISE
     override fun toString(): String = "NullValue"
 
 }
