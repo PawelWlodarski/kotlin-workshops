@@ -3,7 +3,7 @@ package lodz.jug.kotlin.starter.types.exercises
 import io.kotlintest.matchers.shouldBe
 import io.kotlintest.specs.StringSpec
 
-class NullUnionsAnswers : StringSpec() {
+class NullUnionsExercises : StringSpec() {
     init {
         "kotlin native type system" {
             NullSafeStringJoiner.join("[", "hello", "]") shouldBe "[Hello]"
