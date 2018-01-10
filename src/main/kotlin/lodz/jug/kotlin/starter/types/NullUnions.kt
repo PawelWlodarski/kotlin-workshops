@@ -8,7 +8,7 @@ fun main(args: Array<String>) {
     val sOrNull: String? = "aaa"
     val sOrNull2: String? = null
 
-//    println(s2OrNull.toUpperCase()) FORBIDDEN - EXPLAIN
+//    println(sOrNull2.toUpperCase()) FORBIDDEN - EXPLAIN
 
     if (sOrNull != null) println(sOrNull.toUpperCase()) // why now it is legal?
 
@@ -25,7 +25,7 @@ fun main(args: Array<String>) {
     Displayer.section("safe upper null", safeUpper(sOrNull2))
 
     fun naiveUpper(input: String) = input.toUpperCase()
-//    unsafeUpper(sOrNull) //compilation error
+//    naiveUpper(sOrNull) //compilation error
 //    val s:String=sOrNull //compilation error
 //    val s:String=null  //compilation error
 
@@ -119,7 +119,7 @@ c) p?.description ?: "NO DESCRIPTION"
 
  * **************************2)
  val n:Any = "123"
- ???{     //what needs to be here istead of '???'
+ ???{     //what needs to be here instead of '???'
     println(n.toInt())
  }
 
