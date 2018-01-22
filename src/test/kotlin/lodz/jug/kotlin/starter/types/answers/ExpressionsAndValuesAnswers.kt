@@ -56,10 +56,10 @@ class ExpressionsAndValues : StringSpec() {
             Shop.EmailSender.lastSentWas("somemail@com") shouldBe true
 
             Shop.sendEmail(null)
-            Shop.EmailSender.lastSentWas("somemail@com") shouldBe true
+            Shop.EmailSender.lastSentWas("admins@shop.com") shouldBe true
 
             Shop.EmailSender.send(null)
-            Shop.EmailSender.lastSentWas("somemail@com") shouldBe true
+            Shop.EmailSender.lastSentWas("admins@shop.com") shouldBe true
         }
     }
 }
@@ -107,7 +107,7 @@ object Shop {
             sentEmails = listOf(sentTo) + sentEmails
         }
 
-        fun lastSentWas(address: String): Boolean = sentEmails.contains(address)
+        fun lastSentWas(address: String): Boolean = sentEmails.first() == address
     }
 
 
