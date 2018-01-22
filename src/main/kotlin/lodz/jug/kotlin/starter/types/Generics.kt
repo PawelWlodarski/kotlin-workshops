@@ -102,7 +102,7 @@ fun main(args: Array<String>) {
 
     Displayer.section("first number",firstNumber)
 
-
+    //CONTRAVARIANCE - LEFT FOR NEXT MODULE
 
     //**********ARRAYS***********/
     Displayer.title("Arrays Invariance")
