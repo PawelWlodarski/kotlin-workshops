@@ -116,6 +116,3 @@ inline fun <reified A> reifiedType(a: Any): String = when (a) {
     is A -> "a is of expected type '${a::class}' (${a.javaClass})"  //error cannot check of instance of erased ...
     else -> "a is of different type '${a::class}' where '${A::class}' was expected"
 }
-
-//use site variance
-//declaration site variance
