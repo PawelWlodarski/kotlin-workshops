@@ -22,6 +22,7 @@ class ExpressionsAndValues : StringSpec() {
         "convert nullable string to description" { // EXERCISE2
             "some description".toDescription().text shouldBe "some description"
             (null as String?).toDescription() shouldBe Description.EMPTY
+            "".toDescription() shouldBe Description.EMPTY
         }.config(enabled = false)
 
         "Generate Delivery address in plain text" {  // EXERCISE3
@@ -36,7 +37,7 @@ class ExpressionsAndValues : StringSpec() {
 
         //sum all prices from products minus discounts (300 -15)+20+50 = 355
         "summary price" { // EXERCISE 4
-
+            // Notice that discount is not percentage but literal value!!
             val p1=Product("TV","great tv",300,15)
             val p2=Product("Book","coaching book",20,null)
             val p3=Product("Keyboard",null,50,null)
