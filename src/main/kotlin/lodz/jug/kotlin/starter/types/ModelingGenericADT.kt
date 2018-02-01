@@ -96,6 +96,29 @@ fun main(args: Array<String>) {
     //Generic ADT with Bottom variant defined at the bottom of this file
 
 
+    Displayer.title("USE SITE VARIANCE")
+    class InvariantClass<A>(private var a:A){
+        fun getA():A = a
+        fun setA(a:A)  { this.a=a}
+
+        override fun toString(): String {
+            return "InvariantClass(a=$a)"
+        }
+
+    }
+
+
+
+    fun setInvariant(invariant:InvariantClass<in Int>,u:Int){
+        invariant.setA(u)
+    }
+
+    val anyInvariant = InvariantClass<Any>("Some Text")
+
+    Displayer.section("any invariant initial",anyInvariant)
+    setInvariant(anyInvariant,7)
+    Displayer.section("any invariant after set",anyInvariant)
+
 }
 
 //CONTRAVARIANCE AND HIGH ORDER FUNCTIONS
