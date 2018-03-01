@@ -5,6 +5,7 @@ import akka.typed.ActorSystem
 import akka.typed.Behavior
 import akka.typed.javadsl.Actor
 import lodz.jug.kotlin.akka.typed.kotlin.MutableBehaviorKT
+import lodz.jug.kotlin.akka.typed.kotlin.send
 
 
 class Greeter1 : MutableBehaviorKT<Greeter1.Protocol.Command>() {

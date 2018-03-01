@@ -2,6 +2,7 @@ package lodz.jug.kotlin.akka.typed.hello
 
 import akka.typed.*
 import akka.typed.scaladsl.Actor
+import lodz.jug.kotlin.akka.typed.kotlin.send
 
 
 class HelloScala1 : Actor.MutableBehavior<HelloScala1.Protocol.Command>() {
@@ -63,5 +64,3 @@ fun main(args: Array<String>) {
     ActorSystem.create(root,"HelloWorld") // create is actually Java API
 
 }
-
-infix fun <T> ActorRef<T>.send(cmd:T) = this.tell(cmd)
