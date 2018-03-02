@@ -1,9 +1,9 @@
 package lodz.jug.kotlin.akka.typed.hello
 
-import akka.typed.ActorRef
-import akka.typed.ActorSystem
-import akka.typed.Behavior
-import akka.typed.javadsl.Actor
+import akka.actor.typed.ActorRef
+import akka.actor.typed.ActorSystem
+import akka.actor.typed.Behavior
+import akka.actor.typed.javadsl.Behaviors
 import lodz.jug.kotlin.akka.typed.kotlin.MutableBehaviorKT
 import lodz.jug.kotlin.akka.typed.kotlin.send
 
@@ -26,7 +26,7 @@ class Greeter1 : MutableBehaviorKT<Greeter1.Protocol.Command>() {
             data class WhoToGreet(val who: String) : Command()
         }
 
-        val greeterBehaviour: Behavior<Command> = Actor.mutable<Command> { ctx -> Greeter1() }
+        val greeterBehaviour: Behavior<Command> = Behaviors.mutable<Command> { ctx -> Greeter1() }
     }
 }
 
@@ -40,11 +40,11 @@ object Greeter2 {
     val greeterBehavior: Behavior<CommandJava> = greeterBehaviour(currentGreeting = "hello")
 
     private fun greeterBehaviour(currentGreeting: String): Behavior<CommandJava> =
-            Actor.immutable<CommandJava> { _, msg ->
+            Behaviors.immutable<CommandJava> { _, msg ->
                 when (msg) {
                     Greet -> {
                         println(currentGreeting)
-                        Actor.same()
+                        Behaviors.same()
                     }
                     is WhoToGreet -> greeterBehaviour("hello ${msg.who}")
 
@@ -53,13 +53,13 @@ object Greeter2 {
 }
 
 fun main(args: Array<String>) {
-    val root: Behavior<Nothing> = Actor.deferred<Nothing> { ctx ->
+    val root: Behavior<Nothing> = Behaviors.setup<Nothing> { ctx ->
         val greeter: ActorRef<CommandJava> = ctx.spawn(Greeter2.greeterBehavior, "greeter")
 
         greeter send WhoToGreet("Java")
         greeter send Greet
 
-        Actor.empty()
+        Behaviors.empty<Nothing>()
     }
 
     ActorSystem.create(root, "HelloWorld")

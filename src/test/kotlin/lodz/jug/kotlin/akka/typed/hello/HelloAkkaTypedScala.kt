@@ -1,11 +1,11 @@
 package lodz.jug.kotlin.akka.typed.hello
 
-import akka.typed.*
-import akka.typed.scaladsl.Actor
+import akka.actor.typed.*
+import akka.actor.typed.scaladsl.Behaviors
 import lodz.jug.kotlin.akka.typed.kotlin.send
 
 
-class HelloScala1 : Actor.MutableBehavior<HelloScala1.Protocol.Command>() {
+class HelloScala1 : Behaviors.MutableBehavior<HelloScala1.Protocol.Command>() {
 
     private var greeting = "hello"
 
@@ -23,7 +23,7 @@ class HelloScala1 : Actor.MutableBehavior<HelloScala1.Protocol.Command>() {
             data class ScalaWhoToGreet(val who: String) : Command()
         }
 
-        val greeterBehaviour: Behavior<Command> = Actor.mutable<Command> { ctx -> HelloScala1() }
+        val greeterBehaviour: Behavior<Command> = Behaviors.mutable<Command> { ctx -> HelloScala1() }
     }
 }
 
@@ -36,13 +36,13 @@ object HelloScala2 {
     val greeterBehavior: Behavior<Command> = greeterBehavior(currentGreeting = "hello")
 
     private fun greeterBehavior(currentGreeting: String): Behavior<Command> =
-            Actor.immutable { _, msg ->
+            Behaviors.immutable { _, msg ->
                 when (msg) {
                     is ScalaWhoToGreet ->
                         greeterBehavior("hello, ${msg.who}")
                     ScalaGreet -> {
                         println(currentGreeting)
-                        Actor.same<Command>()
+                        Behaviors.same<Command>()
                     }
 
                 }
@@ -51,12 +51,12 @@ object HelloScala2 {
 }
 
 fun main(args: Array<String>) {
-    val root = Actor.deferred<Nothing> { ctx ->
+    val root = Behaviors.setup<Nothing> { ctx ->
         //scala default parameters not working in kotlin -> props
         val greeter: ActorRef<Command> = ctx.spawn(HelloScala2.greeterBehavior, "greeter", Props.empty())
         greeter.tell(ScalaWhoToGreet("ScalaExample"))
         greeter send ScalaGreet
-        Actor.empty()
+        Behaviors.empty()
     }
 
 

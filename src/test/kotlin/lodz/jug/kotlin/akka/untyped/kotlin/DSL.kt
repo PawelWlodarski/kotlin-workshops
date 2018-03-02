@@ -1,9 +1,9 @@
 package lodz.jug.kotlin.akka.untyped.kotlin
 
 import akka.actor.AbstractActor
-import akka.typed.ActorRef
-import akka.typed.Behavior
-import akka.typed.javadsl.Adapter
+import akka.actor.typed.ActorRef
+import akka.actor.typed.Behavior
+import akka.actor.typed.javadsl.Adapter
 import kotlin.reflect.KClass
 
 
@@ -20,7 +20,7 @@ object PropsKt{
 }
 
 //Typed conversions
-fun <T> AbstractActor.ActorContext.spawn(b:Behavior<T>,name:String):akka.typed.ActorRef<T> =
+fun <T> AbstractActor.ActorContext.spawn(b:Behavior<T>,name:String):akka.actor.typed.ActorRef<T> =
         Adapter.spawn(this,b,name)
 
 fun <T> AbstractActor.ActorContext.watchTyped(actorRef: ActorRef<T>) = Adapter.watch(this,actorRef)

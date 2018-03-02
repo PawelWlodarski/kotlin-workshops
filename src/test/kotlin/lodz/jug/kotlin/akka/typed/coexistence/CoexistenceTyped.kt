@@ -1,10 +1,10 @@
 package lodz.jug.kotlin.akka.typed.coexistence
 
 import akka.actor.UntypedAbstractActor
-import akka.typed.ActorRef
-import akka.typed.Behavior
-import akka.typed.javadsl.Actor
-import akka.typed.javadsl.ActorContext
+import akka.actor.typed.ActorRef
+import akka.actor.typed.Behavior
+import akka.actor.typed.javadsl.Behaviors
+import akka.actor.typed.javadsl.ActorContext
 import lodz.jug.kotlin.akka.typed.kotlin.*
 import lodz.jug.kotlin.akka.untyped.kotlin.*
 import java.util.concurrent.TimeUnit
@@ -49,7 +49,7 @@ data class Ping(val replyTo: ActorRef<Pong>) :Command()
 object Pong
 
 object CoexistenceTyped{
-    val behavior:Behavior<Command> = Actor.immutable { ctx,msg ->
+    val behavior:Behavior<Command> = Behaviors.immutable { ctx,msg ->
         when(msg){
             is Ping -> onPing(ctx,msg)
         }
@@ -58,7 +58,7 @@ object CoexistenceTyped{
     private fun onPing(ctx: ActorContext<Command>, msg: Ping):Behavior<Command>  {
         println("${ctx.self} got Ping from ${msg.replyTo}")
         msg.replyTo send Pong
-        return Actor.same<Command>()
+        return Behaviors.same<Command>()
     }
 
 }
@@ -68,13 +68,13 @@ sealed class Command2
 object Pong2 :Command2()
 
 object CoexistenceTyped2 {
-    val behavior:Behavior<Command2> = Actor.deferred{ctx ->
+    val behavior:Behavior<Command2> = Behaviors.setup{ctx ->
         val second: akka.actor.ActorRef = ctx.actorOf(CoexistenceUntyped2.props(),"second")
         ctx.watchUntyped(second)
 
         second.tell(Ping2(ctx.self),ctx.self.toUntyped())
 
-        val first: Behavior<Command2> = Actor.immutable<Command2>{ ctx, msg ->
+        val first: Behavior<Command2> = Behaviors.immutable<Command2>{ ctx, msg ->
             when(msg){
                 Pong2 -> onPong(ctx, second)
             }
@@ -89,7 +89,7 @@ object CoexistenceTyped2 {
         println("${ctx.self} got Pong")
         // context.stop is an implicit extension method
         ctx.stopUntyped(second)
-        return Actor.same()
+        return Behaviors.same()
     }
 }
 
