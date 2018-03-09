@@ -113,8 +113,8 @@ object ListJoiner{
 
 //EXERCISE3
 object AnyTypeFactory {
-    inline fun <reified T> create():T = T::class.constructors.first().call()
-    inline fun <A,B,reified T> createWithArgs(a:A,b:B):T = T::class.constructors.first().call(a,b)
+    inline fun <reified T> create():T = T::class.constructors.first { it.parameters.isEmpty() }.call()
+    inline fun <A,B,reified T> createWithArgs(a:A,b:B):T = T::class.constructors.first{ it.parameters.size == 2 }.call(a,b)
 }
 
 //EXERCISE4

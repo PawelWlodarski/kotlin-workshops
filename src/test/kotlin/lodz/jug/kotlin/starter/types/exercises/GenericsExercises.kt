@@ -116,8 +116,8 @@ class GenericsExercises : StringSpec(){
 
 //EXERCISE3
 //object AnyTypeFactory {
-//    inline fun <???> create():??? = ???::class.constructors.first().call()
-//    inline fun <???,???,???> createWithArgs(a:A,b:B):??? = ???::class.constructors.first().call(a,b)
+//    inline fun <???> create():??? = ???::class.constructors.first{ it.parameters.isEmpty() }.call()
+//    inline fun <???,???,???> createWithArgs(a:A,b:B):??? = ???::class.constructors.first{ it.parameters.size == 2 }.call(a,b)
 //}
 
 //EXERCISE4
