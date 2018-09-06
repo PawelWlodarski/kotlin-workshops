@@ -1,6 +1,6 @@
 package lodz.jug.kotlin.starter.oop
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 class StaticMethodsTest : StringSpec() {
@@ -10,7 +10,7 @@ class StaticMethodsTest : StringSpec() {
             result shouldBe "prefix_test"
         }
 
-        "Static Methods should add prefix " {
+        "Static Methods should multiply" {
             val result = StaticMethods.multiply(4, 5)
 
             result shouldBe 20 //change to 19 and check result

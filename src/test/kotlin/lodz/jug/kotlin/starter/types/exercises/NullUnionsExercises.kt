@@ -5,20 +5,20 @@ import io.kotlintest.specs.StringSpec
 
 class NullUnionsExercises : StringSpec() {
     init {
-        "kotlin native type system" {
+        "kotlin native type system".config(enabled = false) {
             NullSafeStringJoiner.join("[", "hello", "]") shouldBe "[Hello]"
             NullSafeStringJoiner.join(null, "hello", null) shouldBe "Hello"
             NullSafeStringJoiner.join("[", null, "]") shouldBe "[]"
             NullSafeStringJoiner.join("[", "   HELLO   ", "]") shouldBe "[Hello]"
-        }.config(enabled = false)
+        }
 
-        "custom union type" {
+        "custom union type".config(enabled = false) {
             val hello = NullUnion.of("  hello  ")
             val helloNull = NullUnion.of(null)
 
             hello.safeCall { it.trim() }.safeCall { it.toLowerCase().capitalize() }.unsafeGet() shouldBe "Hello"
             helloNull.safeCall { it.trim() }.elvis({ it.toLowerCase().capitalize() }, "empty") shouldBe "empty"
-        }.config(enabled = false)
+        }
     }
 }
 
@@ -29,7 +29,7 @@ object NullSafeStringJoiner {
 
 //Exercise 2
 
-sealed abstract class NullUnion {
+sealed class NullUnion {
     abstract fun safeCall(call: (String) -> String): NullUnion
     abstract fun elvis(call: (String) -> String, alternative: String): String
     abstract fun unsafeGet(): String

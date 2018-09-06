@@ -1,12 +1,12 @@
 package lodz.jug.kotlin.starter.oop.exercises
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import lodz.jug.kotlin.starter.oop.JavaStatefulObject
 
 class TestingJavaClassesExercise : StringSpec(){
     init {
-        "state in java class should be set correctly" {
+        "state in java class should be set correctly".config(enabled = false) {
             val sut= JavaStatefulObject()
 
             //???
