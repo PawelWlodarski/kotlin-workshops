@@ -9,19 +9,20 @@ import lodz.jug.kotlin.reactive.spring.FluxExtensions.flatMapEx
 
 fun main(args: Array<String>) {
 //    singleThreadFlux()
-    singleThreadWithErrorHandler()
-//    flatMappedThreads()
+//    singleThreadWithErrorHandler()
+//    differentScheduler()
+//    customSubscriber()
+    flatMappedThreads()
 
 }
 
 
 private fun singleThreadFlux(){
     Flux
-            .just("one","two","three")
+            .just("one","two","three","four","five")
             .log()
             .map { it.toUpperCase() }
             .subscribe()
-//            .subscribe(::println)
 }
 
 private fun singleThreadWithErrorHandler(){
@@ -34,6 +35,31 @@ private fun singleThreadWithErrorHandler(){
                 println(error.message)
             }
 }
+
+private fun differentScheduler(){
+    Flux
+            .just("one","two","three","four","five")
+            .log()
+            .map { it.toUpperCase() }
+            .subscribeOn(Schedulers.parallel())
+            .subscribe()
+//            .subscribe(::println)
+
+    Thread.sleep(100)
+}
+
+private fun customSubscriber(){
+    Flux
+            .just("one","two","three","four","five")
+            .log()
+            .map { it.toUpperCase() }
+            .subscribeOn(Schedulers.parallel())
+            .subscribe(BatchingSubscriber(2))
+
+    Thread.sleep(100)
+}
+
+
 
 private fun flatMappedThreads() {
     Flux
