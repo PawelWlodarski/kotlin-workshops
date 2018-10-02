@@ -1,5 +1,6 @@
 package lodz.jug.kotlin.reactive.spring.reactor
 
+import lodz.jug.kotlin.reactive.spring.ThreadOps
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 

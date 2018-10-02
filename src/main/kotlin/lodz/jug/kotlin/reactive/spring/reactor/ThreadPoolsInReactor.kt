@@ -4,7 +4,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import lodz.jug.kotlin.reactive.spring.FluxExtensions.flatMapEx
-
+import lodz.jug.kotlin.reactive.spring.reactor.subscribers.BatchingSubscriber
 
 
 fun main(args: Array<String>) {

@@ -1,4 +1,4 @@
-package lodz.jug.kotlin.reactive.spring.reactor
+package lodz.jug.kotlin.reactive.spring.reactor.subscribers
 
 import org.reactivestreams.Subscription
 import reactor.core.publisher.BaseSubscriber

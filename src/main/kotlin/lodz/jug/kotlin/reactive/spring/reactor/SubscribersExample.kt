@@ -1,5 +1,7 @@
 package lodz.jug.kotlin.reactive.spring.reactor
 
+import lodz.jug.kotlin.reactive.spring.reactor.subscribers.BatchingSubscriber
+import lodz.jug.kotlin.reactive.spring.reactor.subscribers.SimpleSubscriber
 import reactor.core.publisher.Flux
 import reactor.core.scheduler.Schedulers
 
