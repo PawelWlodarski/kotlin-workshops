@@ -4,6 +4,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 import lodz.jug.kotlin.reactive.spring.FluxExtensions.flatMapEx
+import lodz.jug.kotlin.reactive.spring.ThreadOps
 import lodz.jug.kotlin.reactive.spring.reactor.subscribers.BatchingSubscriber
 
 
@@ -12,8 +13,9 @@ fun main(args: Array<String>) {
 //    singleThreadWithErrorHandler()
 //    differentScheduler()
 //    customSubscriber()
-    flatMappedThreads()
-
+//    flatMappedThreads()
+    runOnWhichThread()
+//    canNotBlockInReactive()
 }
 
 
@@ -71,6 +73,50 @@ private fun flatMappedThreads() {
 
     Thread.sleep(100)
 }
+
+
+private fun runOnWhichThread() {
+    val s = Schedulers.newParallel("4Pancerni",4)
+
+    val flux = Flux
+            .range(1, 3)
+            .log()
+            .map { i ->
+                ThreadOps.printThreadName()
+                10 + i }
+            .publishOn(s)
+            .map { i ->
+                ThreadOps.printThreadName()
+                "value $i"
+            }
+
+    val t=Thread { flux.subscribe({ println(it) }) }
+    t.start()
+    t.join()
+
+}
+
+private fun canNotBlockInReactive()  {
+    println("testing blocking in parallel")
+    val blocksInParallel=Flux.just("one","two","three")
+            .publishOn(Schedulers.parallel())
+            .subscribeOn(Schedulers.parallel())
+            .flatMap{input ->
+                val m=Mono.just("$input in mono")
+                m.block()
+                m
+            }
+
+//    blocksInParallel.blockFirst()
+    blocksInParallel.doOnError {
+        println("ERROR OCCURED")
+        it.printStackTrace()
+    }
+    blocksInParallel.subscribe{println("this should not work")}
+
+    Thread.sleep(100)
+}
+
 
 
 
