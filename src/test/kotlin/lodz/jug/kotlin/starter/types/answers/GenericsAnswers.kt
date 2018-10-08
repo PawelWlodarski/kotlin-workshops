@@ -1,14 +1,14 @@
 package lodz.jug.kotlin.starter.types.answers
 
 import io.kotlintest.matchers.beInstanceOf
-import io.kotlintest.matchers.should
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.should
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import java.util.*
 
 class GenericsAnswers : StringSpec(){
     init {
-        "create GenericPair " { //EXERCISE1
+        "create GenericPair ".config(enabled = false) { //EXERCISE1
             //My Pair code at the bottom
             val pair1:MyPair<String,Int> = MyPair("aaa",3)
             val pair2:MyPair<List<String>,List<Int>> = MyPair(listOf("aaa","bbb"),listOf(3,4))
@@ -17,7 +17,7 @@ class GenericsAnswers : StringSpec(){
             pair1.getB() shouldBe 3
             pair2.getA() shouldBe listOf("aaa","bbb")
             pair2.getB() shouldBe listOf(3,4)
-        }.config(enabled = false)
+        }
 
         "join two lists" { //EXERCISE2
              val l1: List<Int> =listOf(1,2,3,4,5)
@@ -113,8 +113,8 @@ object ListJoiner{
 
 //EXERCISE3
 object AnyTypeFactory {
-    inline fun <reified T> create():T = T::class.constructors.first().call()
-    inline fun <A,B,reified T> createWithArgs(a:A,b:B):T = T::class.constructors.first().call(a,b)
+    inline fun <reified T> create():T = T::class.constructors.first { it.parameters.isEmpty() }.call()
+    inline fun <A,B,reified T> createWithArgs(a:A,b:B):T = T::class.constructors.first{ it.parameters.size == 2 }.call(a,b)
 }
 
 //EXERCISE4

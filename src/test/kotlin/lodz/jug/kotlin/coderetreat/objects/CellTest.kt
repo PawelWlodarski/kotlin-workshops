@@ -1,10 +1,10 @@
 package lodz.jug.kotlin.coderetreat.objects
 
 import io.kotlintest.matchers.shouldBe
-import io.kotlintest.properties.forAll
-import io.kotlintest.properties.headers
-import io.kotlintest.properties.row
-import io.kotlintest.properties.table
+import io.kotlintest.tables.forAll
+import io.kotlintest.tables.table
+import io.kotlintest.tables.row
+import io.kotlintest.tables.headers
 import io.kotlintest.specs.StringSpec
 
 class  CellTest : StringSpec(){
