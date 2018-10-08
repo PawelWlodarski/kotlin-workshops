@@ -1,6 +1,6 @@
 package lodz.jug.kotlin.coderetreat.objects
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.tables.forAll
 import io.kotlintest.tables.table
 import io.kotlintest.tables.row

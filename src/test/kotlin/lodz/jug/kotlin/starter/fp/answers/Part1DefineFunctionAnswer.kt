@@ -1,6 +1,6 @@
 package lodz.jug.kotlin.starter.fp.answers
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import org.funktionale.composition.*
 

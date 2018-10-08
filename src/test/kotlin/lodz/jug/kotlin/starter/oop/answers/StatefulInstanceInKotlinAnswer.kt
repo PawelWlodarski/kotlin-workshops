@@ -1,8 +1,8 @@
 package lodz.jug.kotlin.starter.oop.answers
 
-import io.kotlintest.matchers.containsAll
-import io.kotlintest.matchers.should
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.matchers.containAll
+import io.kotlintest.should
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 import java.util.*
 
@@ -24,7 +24,7 @@ class StatefulInstanceInKotlinAnswer : StringSpec(){
             instance.set("four")
 
             val history: Collection<Any> = instance.showHistory()
-            history should containsAll<Any>("one","two","three","four") //notice that element from constructor is also here
+            history should containAll<Any>("one","two","three","four") //notice that element from constructor is also here
         }
     }
 }

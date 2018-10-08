@@ -1,6 +1,6 @@
 package lodz.jug.kotlin
 
-import io.kotlintest.matchers.shouldBe
+import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
 
 class HelloTest: StringSpec(){
