@@ -5,15 +5,17 @@ import reactor.core.publisher.Mono
 import reactor.core.scheduler.Schedulers
 
 fun main(args: Array<String>) {
-//    throwingExceptionFromSuccess()
+    example1ThrowingExceptionFromSuccess()
 //    throwingExceptionFromSuccessInSeparatePool()
-
-    MonoErrorSingleton()
+//    MonoErrorSingleton()
 }
 
 
-
-private fun throwingExceptionFromSuccess() {
+/**
+ * When error is thrown in onSuccess callback
+ * then error is propagated and "doOneError" procedure is not triggered.
+ */
+private fun example1ThrowingExceptionFromSuccess() {
     //MonoPeekTerminal onComplete signaling error
     //here we have just a function
     val m = Mono.just(7).doOnSuccess { arg ->
@@ -31,6 +33,7 @@ private fun throwingExceptionFromSuccess() {
     //BlockingSingleSubscriber.onError
     println("result ${m.block()}")
 }
+
 
 private fun throwingExceptionFromSuccessInSeparatePool() {
     val m = Mono.just(7)

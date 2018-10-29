@@ -43,8 +43,6 @@ fun example3FullBlocking() = runBlocking {
     delay(2000)
 }
 
-fun displayThread(message:String) = println("thread : ${Thread.currentThread().name} : $message")
-
 fun runExample4() {
     displayThread("example4Outer")
     example4ThreadsInfo()
