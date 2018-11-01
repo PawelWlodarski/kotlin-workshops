@@ -23,7 +23,7 @@ fun helloRouterFunction(): RouterFunction<ServerResponse> {
 }
 
 
-object KotlinServer {
+object KotlinServer1 {
 
     fun startReactor(router : RouterFunction<ServerResponse>, host:String="localhost", port:Int=9050) {
         val ctx = GenericApplicationContext{
@@ -43,5 +43,5 @@ object KotlinServer {
 
 fun main(args: Array<String>) {
 
-        KotlinServer.startReactor(helloRouterFunction())
+        KotlinServer1.startReactor(helloRouterFunction())
 }
