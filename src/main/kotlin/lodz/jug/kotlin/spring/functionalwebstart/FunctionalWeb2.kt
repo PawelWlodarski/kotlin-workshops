@@ -16,22 +16,25 @@ import reactor.core.publisher.Mono.just
 import reactor.ipc.netty.http.server.HttpServer
 
 
+//BEAN interface
 interface RepositoryExample2 {
     fun find(id: Int): Mono<String>
 }
 
+//BEAN implementation
 object InMemoryRepo : RepositoryExample2 {
     override fun find(id: Int): Mono<String> = if (id == 1) Mono.just("SUCCESS") else Mono.empty()
 }
 
 object FunctionalExample2 {
 
-    //Kotlin-reflect needed
+    //Kotlin-reflect needed.  Repository Injected
     private fun routing(repo: RepositoryExample2): RouterFunction<ServerResponse> =
         router {
             GET("/hello") { _ ->
                 ok().body(just("Example 2"), String::class.java)
             }
+            //next mapping in new line
             GET("/find/{id}") { request ->
                 val response = Mono.justOrEmpty(request.pathVariable("id"))
                         .map(Integer::valueOf)

@@ -15,8 +15,10 @@ import reactor.ipc.netty.http.server.HttpServer
 
 
 fun helloRouterFunction(): RouterFunction<ServerResponse> {
+    //This one uses official kotlin DSL for building Routerfunction and Handlerfunctions
     return router {
         GET("/hello") { _ ->
+            //and below is HandlerFunction
             ok().body(just("Hello World!"), String::class.java)
         }
     }
@@ -27,15 +29,18 @@ object KotlinServer1 {
 
     fun startReactor(router : RouterFunction<ServerResponse>, host:String="localhost", port:Int=9050) {
         val ctx = GenericApplicationContext{
+            // Explain kotlin dsl
             beans {
                 bean("webHandler"){
-                    RouterFunctions.toWebHandler(router)
+                    RouterFunctions.toWebHandler(router) //<- change our routing intpo spring component
                 }
             }.initialize(this)
             refresh()
         }
 
+        //reactory library
         val server = HttpServer.create(port)
+        //spring library - adapter
         val httpHandler = WebHttpHandlerBuilder.applicationContext(ctx).build()
         server.startAndAwait(ReactorHttpHandlerAdapter(httpHandler))
     }
