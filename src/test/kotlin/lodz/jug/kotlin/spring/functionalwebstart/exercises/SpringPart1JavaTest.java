@@ -1,11 +1,11 @@
-package lodz.jug.kotlin.spring.functionalwebstart.answers;
+package lodz.jug.kotlin.spring.functionalwebstart.exercises;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 class SpringPart1JavaTest {
 
-    WebTestClient client = WebTestClient.bindToApplicationContext(lodz.jug.kotlin.spring.functionalwebstart.answers.SpringPart1Answers.INSTANCE.getCtx()).build();
+    WebTestClient client = WebTestClient.bindToApplicationContext(SpringPart1Exercises.INSTANCE.getCtx()).build();
 
     @Test
     void simpleGet() {
@@ -46,6 +46,6 @@ class SpringPart1JavaTest {
                     .exchange()
                     .expectStatus().isBadRequest()
                     .expectBody(String.class)
-                    .isEqualTo("ERROR:"+SpringPart1Answers.ERROR_MESSAGE);
+                    .isEqualTo("ERROR:"+SpringPart1Exercises.ERROR_MESSAGE);
     }
 }

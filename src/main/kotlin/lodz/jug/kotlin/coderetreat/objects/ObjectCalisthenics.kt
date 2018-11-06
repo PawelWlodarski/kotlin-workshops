@@ -11,7 +11,5 @@ object LiveCell : Cell(){
 }
 
 object DeadCell : Cell(){
-    override fun evolve(ns: Int): Cell {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun evolve(ns: Int): Cell  =  if(ns == 3) LiveCell else DeadCell
 }
