@@ -1,8 +1,8 @@
 package lodz.jug.kotlin.starter.fp.answers
 
+import arrow.core.andThen
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
-import org.funktionale.composition.*
 
 class Part1DefineFunctionAnswer : StringSpec() {
     init {

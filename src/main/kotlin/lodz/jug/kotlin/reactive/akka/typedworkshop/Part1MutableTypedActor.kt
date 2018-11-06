@@ -6,8 +6,8 @@ import akka.actor.typed.ActorRef
 import akka.actor.typed.ActorSystem
 import akka.actor.typed.Behavior
 import akka.actor.typed.javadsl.Behaviors
-import kategory.Option
-import kategory.getOrElse
+import arrow.core.Option
+import arrow.core.getOrElse
 import lodz.jug.kotlin.Displayer
 import lodz.jug.kotlin.reactive.akka.typedworkshop.adapters.MutableBehaviorKT
 import lodz.jug.kotlin.reactive.akka.typedworkshop.adapters.send
@@ -51,20 +51,20 @@ object Part1Goodbye : Part1Command()
 
 class MutableTyped : MutableBehaviorKT<Part1Command>(){
 
-    private var state : Option<String> = Option.None
+    private var state : Option<String> = Option.empty()
     private var sender : ActorRef<in String>? = null
 
     override fun receive(ctx: ActorContext<Part1Command>, msg: Part1Command): Behavior<Part1Command>  =
             when(msg){
                 is Part1Hello ->{
-                    state = Option.Some(msg.who)
+                    state = Option(msg.who)
                     sender = msg.replyTo
                     //Expect some thread from an actor pool
                     println("Hello to ${msg.who} in thread ${Thread.currentThread().name}")
                     this
                 }
                 is Part1Goodbye -> {
-                    println("""bye to ${state.getOrElse {  "UNKNOWN" }} """)
+                    println("""bye to ${state.getOrElse {"UNKNOWN"} } """)
                     sender send "bye to ${state.getOrElse{"UNKNOWN"}}"
                     Behaviors.stopped() // actor died!!!
                 }

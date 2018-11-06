@@ -1,7 +1,7 @@
 package lodz.jug.kotlin.starter.fp
 
 import lodz.jug.kotlin.Displayer
-import org.funktionale.composition.*
+import arrow.core.andThen
 
 fun main(args: Array<String>) {
     Displayer.header(" KOTLIN STARTER FP - Functions")

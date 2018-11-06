@@ -2,9 +2,9 @@
 
 package lodz.jug.kotlin.starter.fp.exercises
 
+import arrow.core.andThen
 import io.kotlintest.shouldBe
 import io.kotlintest.specs.StringSpec
-import org.funktionale.composition.*
 
 class Part1DefineFunctionExercise : StringSpec() {
     init {
