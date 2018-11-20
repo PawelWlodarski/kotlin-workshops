@@ -3,6 +3,10 @@ package lodz.jug.kotlin.reactive.spring.reactor.subscribers
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
 
+/**
+ * Example of how to use custom subscriber
+ * Usage in SubscriberExample
+ */
 class BatchingSubscriber<A>(private val batch:Long) : Subscriber<A>{
 
     private var count:Long = 0

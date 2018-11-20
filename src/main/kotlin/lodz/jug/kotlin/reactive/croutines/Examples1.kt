@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
     example8ManyDots()
 }
 
-
+//one scope
 fun example1GlobalScope() {
     GlobalScope.launch {
         delay(1000L)
@@ -23,6 +23,8 @@ fun example1GlobalScope() {
     Thread.sleep(2000)
 }
 
+
+//scope and blocking
 fun example2MixingBlocking() {
     GlobalScope.launch {
         delay(1000L)

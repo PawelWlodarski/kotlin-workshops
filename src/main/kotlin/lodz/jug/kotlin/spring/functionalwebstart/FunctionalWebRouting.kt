@@ -13,11 +13,13 @@ typealias RequestHandler = (ServerRequest) -> Mono<ServerResponse>
 fun main(args: Array<String>) {
 
 
-
+    //show sync version
     val helloHandler: (ServerRequest) -> Mono<ServerResponse> =
             { ServerResponse.ok().body(Mono.just("Example3"), String::class.java) }
 
+
     //For below you need a DSL instance
+    //show method approach
     val dsl = RouterFunctionDsl()
     val requestPredicate: RequestPredicate = (dsl.GET("/example3").or(dsl.GET("/hello3")))
 
