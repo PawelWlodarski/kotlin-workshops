@@ -1,6 +1,6 @@
 package lodz.jug.kotlin.reactive.croutines
 
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.*
 
 fun main(args: Array<String>) {
 //    example1GlobalScope()

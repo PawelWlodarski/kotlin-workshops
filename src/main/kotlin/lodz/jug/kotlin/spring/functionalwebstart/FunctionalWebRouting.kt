@@ -23,7 +23,6 @@ fun main(args: Array<String>) {
     val dsl = RouterFunctionDsl()
     val requestPredicate: RequestPredicate = (dsl.GET("/example3").or(dsl.GET("/hello3")))
 
-
     //just a function, easy to test
     val jsonRoute : RequestHandler =  { r ->
         val response = r.bodyToMono(String::class.java)

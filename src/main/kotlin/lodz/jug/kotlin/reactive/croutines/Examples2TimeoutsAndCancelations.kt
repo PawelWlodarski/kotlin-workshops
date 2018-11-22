@@ -1,8 +1,6 @@
 package lodz.jug.kotlin.reactive.croutines
 
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import kotlinx.coroutines.*
 
 fun main(args: Array<String>) {
     example1CancelSimpleJob()
