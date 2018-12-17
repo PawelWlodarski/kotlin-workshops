@@ -28,6 +28,7 @@
         <jug.junit.version>5.3.1</jug.junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
+        <ktor.version>1.0.1</ktor.version>
         <akka.version>2.5.16</akka.version>
         <reactor.version>3.2.2.RELEASE</reactor.version>
         <arrow.version>0.7.3</arrow.version>
@@ -94,6 +95,22 @@
             <artifactId>reactor-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <!-- ktor -->
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-core</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-server-netty</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+
+
+
 
         <!-- akka -->
         <dependency>
@@ -220,7 +237,7 @@
     </build>
     <repositories>
         <repository>
-            <id>central</id>
+            <id>jcenter</id>
             <name>bintray</name>
             <url>http://jcenter.bintray.com</url>
         </repository>
