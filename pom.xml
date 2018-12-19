@@ -110,6 +110,13 @@
         </dependency>
 
 
+        <dependency>
+            <groupId>io.ktor</groupId>
+            <artifactId>ktor-html-builder</artifactId>
+            <version>${ktor.version}</version>
+        </dependency>
+
+
 
 
         <!-- akka -->
