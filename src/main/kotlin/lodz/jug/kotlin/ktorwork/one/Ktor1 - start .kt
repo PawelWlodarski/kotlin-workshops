@@ -17,13 +17,35 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 
+/**
+ * adHocConfig - defines configuration in one place with use of anonymous functions
+ *
+ */
 fun main(args: Array<String>) {
 //    adHocConfig()
     Routes.startServerWithCustomModule()
 }
 
 
-//This example show quick server configuration
+/**
+ *
+ * embeddedServer - the last arguemnt is a lambda with Application receiver - this is an entry point for DSL
+ *
+ * routing - check implementation. routing is an extension method of an 'Application' so
+ * you can call it only when you have an Application instance available in the scope
+ *
+ * get - is an extension method on a Route instance
+ *
+ * get receive PipelineInterceptor which is an alias for
+ *
+ * suspend io.ktor.util.pipeline.PipelineContext<TSubject, TContext>.(TSubject) -> kotlin.Unit
+ *
+ *
+ * and finally in the pipeline we have  access to current call:
+ *
+ * inline val PipelineContext<*, ApplicationCall>.call: ApplicationCall get() = context
+ *
+ */
 private fun adHocConfig() {
     val server = embeddedServer(Netty, 8080) {
         routing {
@@ -36,18 +58,15 @@ private fun adHocConfig() {
     server.start(wait = true)
 }
 
-//This one shows modularisation
+/**
+ * note here that we use already defined myModule2. This approach decople application structure from the way it is started
+ * There is also myModule1 defined <- start from that one
+ */
 object Routes{
     fun startServerWithCustomModule() =
-            embeddedServer(Netty,port = 8080, module = Application::myModule2).start(wait = true)
+            embeddedServer(Netty,port = 8080, module = Application::myModule1).start(wait = true)
 }
 
-//It has to be defined on a top level so extension is visible
-fun Routing.routes1() {
-    get("/"){
-        call.respondText("I'm in the module in composite routing!", ContentType.Text.Html)
-    }
-}
 
 fun Routing.routes2() {
     get("/"){
@@ -62,12 +81,34 @@ fun Routing.routes2() {
 }
 
 
-//It has to be defined on a top level so extension is visible
+/**
+ * A module definition.
+ * It has to be defined on a top level so extension is visible
+ *
+ * Here you have also an illustration of decoupled routes.
+ *
+ */
 fun Application.myModule1(){
         routing {routes1()}
 }
 
-//modular configuration
+//It has to be defined on a top level so extension is visible
+fun Routing.routes1() {
+    get("/"){
+        call.respondText("I'm in the module in composite routing!", ContentType.Text.Html)
+    }
+}
+
+
+/**
+ * second example o a modular configuration.
+ * This time we added additional configuration to the module.
+ *
+ * install section will add 'plugins/traits' or something like this to the module
+ *
+ * 'StatusPage' plugin adds common handlers for particular exceptions or statuses
+ *
+ */
 fun Application.myModule2(){
     routing {routes2()}
 
@@ -77,7 +118,7 @@ fun Application.myModule2(){
         }
     }
 
-    //Order not important
+    //Order inside is not important - it is standard builder
     install(StatusPages){
         exception<IllegalAccessException> {
             call.respond(HttpStatusCode.Forbidden)
