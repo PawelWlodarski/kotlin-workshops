@@ -28,7 +28,7 @@
         <jug.junit.version>5.3.1</jug.junit.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
-        <ktor.version>1.0.1</ktor.version>
+        <ktor.version>1.1.1</ktor.version>
         <akka.version>2.5.16</akka.version>
         <reactor.version>3.2.2.RELEASE</reactor.version>
         <arrow.version>0.7.3</arrow.version>
@@ -96,6 +96,20 @@
             <scope>test</scope>
         </dependency>
 
+        <!--rx -->
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxjava</artifactId>
+            <version>2.2.5</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>io.reactivex.rxjava2</groupId>
+            <artifactId>rxkotlin</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
         <!-- ktor -->
         <dependency>
             <groupId>io.ktor</groupId>
@@ -122,6 +136,26 @@
             <version>${ktor.version}</version>
         </dependency>
 
+        <!-- http -->
+        <dependency>
+            <groupId>com.github.kittinunf.fuel</groupId>
+            <artifactId>fuel</artifactId>
+            <version>1.16.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.kittinunf.fuel</groupId>
+            <artifactId>fuel-gson</artifactId>
+            <version>1.16.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.5</version>
+        </dependency>
+
 
 
 
@@ -146,6 +180,14 @@
             <version>3.1.7</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.amshove.kluent</groupId>
+            <artifactId>kluent</artifactId>
+            <version>1.37</version>
+            <scope>test</scope>
+        </dependency>
+
 
 
 
