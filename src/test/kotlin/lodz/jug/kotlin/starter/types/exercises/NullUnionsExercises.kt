@@ -6,6 +6,7 @@ import io.kotlintest.specs.StringSpec
 class NullUnionsExercises : StringSpec() {
     init {
         "kotlin native type system".config(enabled = false) {
+            //YES THERE THE MIDDLE PART IS CAPITALIZED
             NullSafeStringJoiner.join("[", "hello", "]") shouldBe "[Hello]"
             NullSafeStringJoiner.join(null, "hello", null) shouldBe "Hello"
             NullSafeStringJoiner.join("[", null, "]") shouldBe "[]"

@@ -8,7 +8,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.test.test
 
-class Mono1Answers {
+class Mono1Exercises {
 
     @Test
     fun `just an example`() {
