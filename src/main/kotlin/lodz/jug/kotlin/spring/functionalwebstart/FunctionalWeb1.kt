@@ -16,9 +16,13 @@ import reactor.ipc.netty.http.server.HttpServer
 
 fun helloRouterFunction(): RouterFunction<ServerResponse> {
     //This one uses official kotlin DSL for building Routerfunction and Handlerfunctions
+    //an example of building such dsl can be found in IntroSpring1.kt
     return router {
+        //for explanation how GET is build take a look at IntroSpring2
         GET("/hello") { _ ->
             //and below is HandlerFunction
+            // Handler function is explained in IntroSpring2
+            //and Reactor api in IntroSpring2 and MonoDemo
             ok().body(just("Hello World!"), String::class.java)
         }
     }
