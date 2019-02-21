@@ -1,6 +1,8 @@
 package lodz.jug.kotlin.spring.functionalwebstart
 
+import arrow.core.None
 import arrow.core.Option
+import arrow.core.Some
 import lodz.jug.kotlin.Displayer
 import reactor.core.publisher.Mono
 import java.time.Duration
@@ -10,22 +12,26 @@ import reactor.core.publisher.toMono
 typealias SyncFunction = (IntroSpring3.Request) -> IntroSpring3.Response
 typealias AsyncServerFunction3 = (IntroSpring3.Request) -> Mono<IntroSpring3.Response>
 
-fun <T> Mono<T>.defer() = Mono.defer {this}
+fun <T> Mono<T>.defer() = Mono.defer { this }
 
 fun main() {
     Displayer.header("spring preparation - REACTIVE")
 
-    val requestQueue= (1 .. 5).map { IntroSpring3.Request("/getUSer",it) }
+    val requestQueue = (1..5).map { IntroSpring3.Request("/getUSer", it) }
 
-//    blockingExample(requestQueue)
-    reactiveExample(requestQueue)
+    blockingExample(requestQueue)
+//    reactiveExample(requestQueue)
+
+    //FLAT_MAP example
+//    println(flatMapExample(1).block())
+//    println(flatMapExample(5).block())
 
 
 }
 
 
 private fun blockingExample(requestQueue: List<IntroSpring3.Request>) {
-    val syncHandler1: SyncFunction = {r ->
+    val syncHandler1: SyncFunction = { r ->
         val user = LocalDao.find(UserId(r.id))
         IntroSpring3.Response("Found user $user")
     }
@@ -43,9 +49,9 @@ private fun blockingExample(requestQueue: List<IntroSpring3.Request>) {
 }
 
 fun reactiveExample(requestQueue: List<IntroSpring3.Request>) {
-    val asyncHandler: AsyncServerFunction3 = {r ->
+    val asyncHandler: AsyncServerFunction3 = { r ->
         Mono.defer { LocalDao.find(UserId(r.id)).toMono() }  //toMono -> Kotlin extension
-                .map {user ->  IntroSpring3.Response("Found user $user") }
+                .map { user -> IntroSpring3.Response("Found user $user") }
         //or
 //        LocalDao.find(UserId(r.id)).toMono().defer()
     }
@@ -64,25 +70,38 @@ fun reactiveExample(requestQueue: List<IntroSpring3.Request>) {
 
 }
 
-inline class UserId(val id:Int)
-data class UserRecord(val id:UserId, val name:String, val age:Int)
-interface Dao{
-    fun find(id:UserId): Option<UserRecord>
+
+fun flatMapExample(id:Int): Mono<UserRecord> {
+    val r = IntroSpring3.Request("/getUSer", id)
+
+   return  Mono.defer { LocalDao.find(UserId(r.id)).toMono() }.flatMap {
+        when (it) {
+            is Some -> Mono.just(it.t)
+            is None ->  Mono.empty()
+        }
+    }
+
 }
 
-object LocalDao : Dao{
+inline class UserId(val id: Int)
+data class UserRecord(val id: UserId, val name: String, val age: Int)
+interface Dao {
+    fun find(id: UserId): Option<UserRecord>
+}
 
-    private val data = mapOf<UserId,UserRecord>(
-            UserId(1) to UserRecord(UserId(1),"Romek", 30)
+object LocalDao : Dao {
+
+    private val data = mapOf<UserId, UserRecord>(
+            UserId(1) to UserRecord(UserId(1), "Romek", 30)
     )
 
-    override fun find(id: UserId): Option<UserRecord>  {
+    override fun find(id: UserId): Option<UserRecord> {
         Thread.sleep(1000)
         return Option.fromNullable(data[id])
     }
 }
 
-object IntroSpring3{
-    data class Request(val path: String, val id:Int)
+object IntroSpring3 {
+    data class Request(val path: String, val id: Int)
     data class Response(val content: String)
 }
