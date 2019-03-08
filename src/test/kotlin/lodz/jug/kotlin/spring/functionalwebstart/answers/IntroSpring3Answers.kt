@@ -82,7 +82,7 @@ class IntroSpring3Answers {
 }
 
 
-inline class ProductId(val id: Int)
+class ProductId(val id: Int)
 
 object Intro3AnswersLibrary {
 
