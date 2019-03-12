@@ -72,7 +72,7 @@ fun createJavaRouter(repo:MessageRepository) : RouterFunction<ServerResponse> {
 
 }
 
-enum class Scope { SINGLETON, PROTOTYPE }
+enum class CustomScope { SINGLETON, PROTOTYPE }
 
 
 /**
@@ -87,7 +87,7 @@ fun createContext():ApplicationContext{
 
     //Repository bean
     val repositoryCustomizer = BeanDefinitionCustomizer { bd ->
-        bd.scope = Scope.SINGLETON.name.toLowerCase()
+        bd.scope = CustomScope.SINGLETON.name.toLowerCase()
     }
     ctx.registerBean(MessageRepository::class.java, Supplier<MessageRepository> { LocalRepository } ,repositoryCustomizer)
     ctx.refresh()
