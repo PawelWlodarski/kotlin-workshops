@@ -20,6 +20,7 @@ fun cancelOnlyWhenSuspends() = runBlocking {
             println("delay ends $i ...")
         }
     }
+    "a".run {  }
     delay(1300L)
     println("before cancelling")
     job.cancel() // cancels the job
@@ -29,6 +30,8 @@ fun cancelOnlyWhenSuspends() = runBlocking {
     job.join() // waits for job's completion
     println("main: Now I can quit.")
 
+
+    val dupa = try{2} catch(e:Exception) {0}
 }
 
 /**

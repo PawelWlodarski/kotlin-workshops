@@ -1,12 +1,11 @@
 package lodz.jug.kotlin
 
-fun main(args: Array<String>) {
+import java.util.concurrent.CompletableFuture
+
+fun main() {
 
 
 }
 
 
-
-class Klaska{
-}
 
