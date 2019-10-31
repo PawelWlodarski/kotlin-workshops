@@ -3,6 +3,7 @@ package lodz.jug.kotlin.coroutines
 import kotlinx.coroutines.*
 import lodz.jug.kotlin.reactive.croutines.displayThread
 import lodz.jug.kotlin.reactive.croutines.withTimeMeasurement
+import java.util.concurrent.Executors
 
 fun main() {
     example1BlockingMainThread()
@@ -53,13 +54,21 @@ fun example2DontBlockMainThread() {
  *
  */
 fun example3ParallelExecution() {
+    val workersDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
+
     withTimeMeasurement("Parallel execution"){
         val img1=GlobalScope.async{
+            displayThread("async block1")
             ImageRepoExample1.process(1)
         }
 
+        ///here we are changing easily execution thread context
         val img2=GlobalScope.async{
-            ImageRepoExample1.process(2)
+            displayThread("async block2 start")
+            withContext(workersDispatcher){
+                displayThread("async block2 switched context")
+                ImageRepoExample1.process(2)
+            }
         }
 
         val job=GlobalScope.launch {
@@ -75,6 +84,8 @@ fun example3ParallelExecution() {
             job.join()
         }
     }
+
+    workersDispatcher.close()
 }
 
 /**
