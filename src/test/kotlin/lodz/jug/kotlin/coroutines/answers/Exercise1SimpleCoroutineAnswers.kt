@@ -17,7 +17,6 @@ import java.util.concurrent.Executors
 class Exercise1SimpleCoroutineAnswers {
 
 
-    @ExperimentalCoroutinesApi
     @Test
     fun exercise1() = runBlockingTest {
         val result = CDownloaderAnswer1.downloadAllInMax1Second()
@@ -31,7 +30,6 @@ class Exercise1SimpleCoroutineAnswers {
     }
 
 
-    @ExperimentalCoroutinesApi
     @Test
     fun exercise2() {
         runBlocking {

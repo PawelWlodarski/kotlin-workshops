@@ -6,8 +6,8 @@ import arrow.core.Option
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.runBlockingTest
 import lodz.jug.kotlin.coroutines.ExerciseLogger
-import lodz.jug.kotlin.coroutines.exercises.CDownloaderAnswer1.Image
-import lodz.jug.kotlin.coroutines.exercises.CDownloaderAnswer1.MISSING_IMAGE
+import lodz.jug.kotlin.coroutines.exercises.CDownloaderExercise1.Image
+import lodz.jug.kotlin.coroutines.exercises.CDownloaderExercise1.MISSING_IMAGE
 import org.amshove.kluent.shouldContainSame
 import org.amshove.kluent.shouldEqual
 import org.junit.Test
@@ -18,10 +18,9 @@ import java.util.concurrent.Executors
 class Exercise1SimpleCoroutineExercises {
 
 
-    @ExperimentalCoroutinesApi
     @Test
     fun exercise1() = runBlockingTest {
-        val result = CDownloaderAnswer1.downloadAllInMax1Second()
+        val result = CDownloaderExercise1.downloadAllInMax1Second()
 
         result.asIterable() shouldContainSame arrayOf(
                 Image("img1"),
@@ -32,12 +31,11 @@ class Exercise1SimpleCoroutineExercises {
     }
 
 
-    @ExperimentalCoroutinesApi
     @Test
     fun exercise2() {
         runBlocking {
             val result = withTimeout(2000) {
-                CEngineAnswer1.calculateSum()
+                CEngineExercise2.calculateSum()
             }
             //observe how easy it is to wait for async result and use it in a matcher
             result shouldEqual BigInteger.valueOf(1799815000)
@@ -49,7 +47,7 @@ class Exercise1SimpleCoroutineExercises {
 // -Dkotlinx.coroutines.debug or -ea
 //
 
-object CDownloaderAnswer1 {
+object CDownloaderExercise1 {
 
     data class Image(val content: String)
 
@@ -73,7 +71,7 @@ object CDownloaderAnswer1 {
         }
     }
 
-    //Dont change anything
+    //Dont change anything in the Downloader
     object Downloader {
         private val images = mapOf(
                 "http://image1" to Image("img1"),
@@ -89,7 +87,7 @@ object CDownloaderAnswer1 {
     }
 }
 
-object CEngineAnswer1 {
+object CEngineExercise2 {
     data class CalculationTask1(val from: BigInteger, val to: BigInteger)
 
 
