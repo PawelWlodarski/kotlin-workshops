@@ -11,6 +11,8 @@ fun main() {
 //    example3ParallelExecution()
 //    example4ResourceLeak()
 //    example5StopCoroutine()
+//    example6SuspendedFunctions()
+//    example7SuspendedFunctionsWithCustomThread()
 }
 
 
@@ -57,7 +59,7 @@ fun example3ParallelExecution() {
     val workersDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
     withTimeMeasurement("Parallel execution"){
-        val img1=GlobalScope.async{
+        val img1: Deferred<Image> =GlobalScope.async{
             displayThread("async block1")
             ImageRepoExample1.process(1)
         }
@@ -138,10 +140,83 @@ fun example5StopCoroutine(){
         delay(900)
         job.cancelAndJoin()
     }
+}
 
+
+fun example6SuspendedFunctions(){
+
+    println("turn on visualvm and observe threads")
+    readLine()
+
+    suspend fun blockingFunctionA():Int= withContext(Dispatchers.IO){
+        displayThread("A: sleeping : ")
+        Thread.sleep(5000)
+        1
+    }
+
+    fun standardFunction():Int{
+        Thread.sleep(2000)  // check what will happen when function blocks in the main context
+        return 2
+    }
+
+    suspend fun blockingFunC()=withContext(Dispatchers.IO){
+        displayThread("C: sleeping : ")
+        Thread.sleep(3000)
+        3
+    }
+
+    suspend fun dependandFunD():Int {
+        displayThread("D: waiting in suspension for C : ")
+        return 4 + blockingFunC()
+    }
+
+    runBlocking {
+        displayThread("runBlocking in")
+        val result= blockingFunctionA() + standardFunction() + dependandFunD()
+        println("result after all suspensions is : $result")
+    }
 
 
 }
+
+fun example7SuspendedFunctionsWithCustomThread(){
+    val singleThread = Executors.newFixedThreadPool(1).asCoroutineDispatcher()
+
+    suspend fun blockingFunctionA():Int= withContext(Dispatchers.IO){
+        Thread.sleep(500)
+        1
+    }
+
+    fun standardFunction():Int {
+//        Thread.sleep(2000)    //run program, observe results and then change context to IO
+        return 2
+    }
+
+    suspend fun blockingFunC()=withContext(Dispatchers.IO){
+        Thread.sleep(300)
+        3
+    }
+
+    suspend fun dependandFunD():Int {
+        return 4 + blockingFunC()
+    }
+
+    val jobs=(1 .. 10).map{iterationNumber ->
+        Thread.sleep(200)
+        GlobalScope.launch(singleThread) {
+            println("starting iteration $iterationNumber")
+            val result= standardFunction() + blockingFunctionA() + dependandFunD()
+            println("iteration $iterationNumber : result after all suspensions is : $result")
+        }
+    }
+
+    runBlocking {
+        jobs.forEach{it.join()}
+    }
+
+    singleThread.close()
+}
+
 
 typealias Image = String
 typealias ImageData = Int
