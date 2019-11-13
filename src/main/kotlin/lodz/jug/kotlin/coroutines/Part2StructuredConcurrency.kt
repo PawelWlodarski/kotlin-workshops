@@ -15,8 +15,9 @@ fun main() {
 //    example6CatchToEarly()
 //    example7Supervision()
 //    example7SupervisionSample2()
- //   example7SupervisionSample3()
+    //   example7SupervisionSample3()
 //    example7SupervisionSample4()
+//    example8ScopesAndExceptions()
 }
 
 fun example1CancelingStructures() = runBlocking {
@@ -258,9 +259,9 @@ fun example7SupervisionSample2() = runBlocking {
     displayThread("main starts")
     val job =
             supervisorScope {
-//            coroutineScope {
+                //            coroutineScope {
                 displayThread("firs level starts")
-                val job=launch(Dispatchers.Default) {
+                val job = launch(Dispatchers.Default) {
 
                     displayThread("second level starts ")
                     throw AssertionError("second level exception")
@@ -285,7 +286,8 @@ fun example7SupervisionSample3() = runBlocking {
 
     displayThread("main starts")
     val job =
-            customScope.launch {  //EXERCISE : remove "customScope." and check the result
+            customScope.launch {
+                //EXERCISE : remove "customScope." and check the result
                 //            coroutineScope {
                 displayThread("firs level starts")
                 launch(Dispatchers.Default) {
@@ -311,7 +313,8 @@ fun example7SupervisionSample4() = runBlocking {
 
     displayThread("main starts")
     val job =
-            customScope.launch() {  //EXERCISE : remove "customScope." and check the result
+            customScope.launch() {
+                //EXERCISE : remove "customScope." and check the result
                 //            coroutineScope {
                 displayThread("firs level starts")
 
@@ -335,4 +338,34 @@ fun example7SupervisionSample4() = runBlocking {
     displayThread("main ends")
     delay(2000)
 
+}
+
+fun example8ScopesAndExceptions() = runBlocking {
+    displayThread("main Starts")
+
+    val normalScope = CoroutineScope(Dispatchers.Default)
+    val supervisorScope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+    normalScope.launch {
+        displayThread("child one is failing")
+        throw java.lang.RuntimeException("child one exception")
+    }
+
+    normalScope.launch {
+        delay(200)
+        displayThread("child two end")
+    }
+
+    supervisorScope.launch {
+        displayThread("child three is failing")
+        throw java.lang.RuntimeException("child three exception")
+    }
+
+    supervisorScope.launch {
+        delay(200)
+        displayThread("child four end")
+    }
+
+    delay(2000)
+    displayThread("main ends")
 }
