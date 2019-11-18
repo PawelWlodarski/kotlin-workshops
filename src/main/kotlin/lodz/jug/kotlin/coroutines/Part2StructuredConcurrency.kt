@@ -1,7 +1,6 @@
 package lodz.jug.kotlin.coroutines
 
 import kotlinx.coroutines.*
-import lodz.jug.kotlin.reactive.croutines.displayThread
 import java.lang.AssertionError
 import java.lang.IllegalArgumentException
 import java.util.concurrent.Executors

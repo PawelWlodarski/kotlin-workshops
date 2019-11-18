@@ -1,4 +1,4 @@
-package lodz.jug.kotlin.reactive.croutines
+package lodz.jug.kotlin.coroutines
 
 import kotlin.system.measureTimeMillis
 

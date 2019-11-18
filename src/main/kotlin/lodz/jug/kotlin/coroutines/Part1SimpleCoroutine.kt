@@ -1,8 +1,6 @@
 package lodz.jug.kotlin.coroutines
 
 import kotlinx.coroutines.*
-import lodz.jug.kotlin.reactive.croutines.displayThread
-import lodz.jug.kotlin.reactive.croutines.withTimeMeasurement
 import java.util.concurrent.Executors
 
 fun main() {
@@ -21,9 +19,9 @@ fun main() {
  */
 fun example1BlockingMainThread() {
     withTimeMeasurement("Blocking main thread example") {
-        val img1=ImageRepoExample1.process(1)
-        val img2=ImageRepoExample1.process(2)
-        ImageRepoExample1.save(img1,img2)
+        val img1 = ImageRepoExample1.process(1)
+        val img2 = ImageRepoExample1.process(2)
+        ImageRepoExample1.save(img1, img2)
     }
 }
 
@@ -35,9 +33,9 @@ fun example1BlockingMainThread() {
 fun example2DontBlockMainThread() {
     val job=GlobalScope.launch(Dispatchers.IO) {//TODO: remove dispatchers io and check what will happen
         withTimeMeasurement("Not blocking main thread") {
-            val img1=ImageRepoExample1.process(1)
-            val img2=ImageRepoExample1.process(2)
-            ImageRepoExample1.save(img1,img2)
+            val img1 = ImageRepoExample1.process(1)
+            val img2 = ImageRepoExample1.process(2)
+            ImageRepoExample1.save(img1, img2)
         }
     }
 
@@ -58,23 +56,23 @@ fun example2DontBlockMainThread() {
 fun example3ParallelExecution() {
     val workersDispatcher = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 
-    withTimeMeasurement("Parallel execution"){
-        val img1: Deferred<Image> =GlobalScope.async{
+    withTimeMeasurement("Parallel execution") {
+        val img1: Deferred<Image> = GlobalScope.async {
             displayThread("async block1")
             ImageRepoExample1.process(1)
         }
 
         ///here we are changing easily execution thread context
-        val img2=GlobalScope.async{
+        val img2 = GlobalScope.async {
             displayThread("async block2 start")
-            withContext(workersDispatcher){
+            withContext(workersDispatcher) {
                 displayThread("async block2 switched context")
                 ImageRepoExample1.process(2)
             }
         }
 
-        val job=GlobalScope.launch {
-            ImageRepoExample1.save(img1.await(),img2.await())
+        val job = GlobalScope.launch {
+            ImageRepoExample1.save(img1.await(), img2.await())
         }
 
 
@@ -231,9 +229,9 @@ object ImageRepoExample1 {
     }
 
     fun save(vararg images: Image) {
-        displayThread("start saving images :  ${images.joinToString() }")
+        displayThread("start saving images :  ${images.joinToString()}")
         Thread.sleep(1000)
-        displayThread("images saved ${images.joinToString() }")
+        displayThread("images saved ${images.joinToString()}")
     }
 
 }
