@@ -6,9 +6,9 @@ import kotlinx.coroutines.flow.*
 import java.util.concurrent.Executors
 
 fun main() {
-    example1JustFlow()
+//    example1JustFlow()
 //    example2DifferentContext()
-//    example3FlowAndCoroutinesCancellation()
+    example3FlowAndCoroutinesCancellation()
 //    example4IntermediateOperators()
 //    example5ConstantFlow()
 //    example6ConstantFlowWithChannel()
@@ -170,9 +170,9 @@ fun example6ConstantFlowWithChannel() {
 
     val checkInterval = 500L
 
-    val scope= CoroutineScope(Executors.newSingleThreadExecutor().asCoroutineDispatcher())
+    val scope = CoroutineScope(Executors.newSingleThreadExecutor().asCoroutineDispatcher())
 
-    val eventChannel=scope.produce {
+    val eventChannel = scope.produce {
         while (true) {
             val e = LegacyEvents.takeEvent()
             e?.let { send(it) }
