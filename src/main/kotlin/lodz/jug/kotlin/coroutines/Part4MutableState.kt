@@ -99,7 +99,7 @@ fun example3Actor() = runBlocking {
     coroutineScope {
         repeat(1000) {
             launch(Dispatchers.Default) {
-                delay(it.toLong())
+                delay(1000L - it)
                 counterActor.send(IncrementCounter)
             }
         }
@@ -132,7 +132,10 @@ fun example4FailedProducersAndActors() = runBlocking {
 
     val producer2 = produce {
         delay(40)
-        for (i in 'a'..'z') send(i)
+        for (i in 'a'..'z') {
+//            delay(40)  -- why it is needed here?
+            send(i)
+        }
     }
 
     val clock = ticker(delayMillis = 100)
@@ -144,16 +147,17 @@ fun example4FailedProducersAndActors() = runBlocking {
         whileSelect {
 
             producer1.onReceiveOrNull {
-
                 displayThread("from producer 1 : $it , $buffer")
                 buffer += it
                 it!=null
             }
 
             producer2.onReceiveOrNull {
-                displayThread("from producer 2 : $it")
+                displayThread("from producer 2 : $it, $buffer")
+//                if(it == null) producer2.cancel() //why it is not working?
                 buffer += it
-                it!=null
+                it!=null //can we cancel producer here?
+//                true // what happen if always true?
             }
             clock.onReceive {
                 displayThread("buffer($buffer)")
@@ -162,6 +166,12 @@ fun example4FailedProducersAndActors() = runBlocking {
             }
         }
     }
+
+    delay(2000)
     actor.close()
+//    producer1.cancel() // why this one is needed to terminate program?
+    producer2.cancel()
+    clock.cancel()
+
 
 }
