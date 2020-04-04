@@ -3,10 +3,11 @@ package lodz.jug.kotlin.spring.functionalwebstart
 import lodz.jug.kotlin.Displayer
 
 @Suppress("MoveLambdaOutsideParentheses")
+// exercises - IntroSpring1Exercises
 fun main() {
     Displayer.header("  SPRING PREPARATION - ROUTER DSL")
 
-    //CUSTOM STRUCTURE SYNTAX
+    //CREATING CUSTOM STRUCTURE SYNTAX
     Displayer.title("EXAMPLE 1 : normal invocation")
     val response = singleRoute("/hello","requestExample1", {request -> "response for $request"})
     Displayer.section("Example 1 response :  ",response)
@@ -17,7 +18,7 @@ fun main() {
     }
     Displayer.section("Example 2 response :  ",r2)
 
-    //dsl builder
+    //CREATING DSL BUILDER
     Displayer.title("EXAMPLE 3 : dsl builder with EXPLICIT it")
     val buildingResult=buildRouterWitIt {
         it.route("/hello",{r -> "response for $r"})
@@ -26,7 +27,7 @@ fun main() {
 
     Displayer.section("building results for EXAMPLE 3 : $buildingResult")
 
-
+    //FINAL VERSION WITH LAMBDA RECEIVER
     Displayer.title("EXAMPLE 4 : the real DSL with implicit receiver")
 
     val dslResult= buildRouter {
@@ -60,7 +61,7 @@ fun buildRouterWitIt(buildLogic : (CustomRoutingDsl) -> Unit):Routes{
 }
 
 /**
- * 3 IMPLICIT BUILDER
+ * 4 IMPLICIT BUILDER
  */
 fun buildRouter(buildLogic : CustomRoutingDsl.() -> Unit):Routes{
     val dsl = CustomRoutingDsl()
@@ -71,7 +72,7 @@ fun buildRouter(buildLogic : CustomRoutingDsl.() -> Unit):Routes{
 
 
 /**
- * 3 DSL STRUCTURE
+ * 3,4 DSL STRUCTURE
  * ** also small alias example
  */
 typealias Handler1 = (Request) -> Response

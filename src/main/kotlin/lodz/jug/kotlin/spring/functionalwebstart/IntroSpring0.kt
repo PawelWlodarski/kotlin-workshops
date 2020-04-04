@@ -18,6 +18,49 @@ import reactor.core.publisher.Mono
 import reactor.ipc.netty.http.server.HttpServer
 import java.util.function.Supplier
 
+/**
+ * THIS IS AN EXAMPLE OF USING JAVA API IN KOTLIN.
+ * KOTLIN API IS IN IntroSpring0b
+ */
+
+fun main() {
+    val ctx= createContext()
+    startServer(ctx)
+}
+
+/**
+ *  Context Initializatio
+ *      1) Create GenericApplicationContext which allow to instantly register beans
+ *      2) Optionally create bean customizers
+ *      3) Register your dependency with Supplier
+ *      4) Refresh
+ *      5) CreateRouting ***
+ *      6)Convert routing to WebFlux WebHandler
+ *
+ */
+fun createContext():ApplicationContext{
+    //https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/context/support/GenericApplicationContext.html
+    val ctx= GenericApplicationContext()
+
+    //Repository bean :https://www.logicbig.com/tutorials/spring-framework/spring-core/spring-5-bean-registration.html
+
+    //to understand syntaxt take a look at usingJavaFunctionalInterface in "scratches"
+    val singletonScopeCustomizer = BeanDefinitionCustomizer { bd ->
+        bd.scope = CustomScope.SINGLETON.name.toLowerCase()
+    }
+
+    //here you can also see Supplier declaration syntax
+    ctx.registerBean(MessageRepository::class.java, Supplier<MessageRepository> { LocalRepository } ,singletonScopeCustomizer)
+    ctx.refresh()
+
+    //Routing bean
+    val repo=ctx.getBean(MessageRepository::class.java)
+    val router: RouterFunction<ServerResponse> =createJavaRouter(repo)
+    val webHandler: WebHandler = RouterFunctions.toWebHandler(router)
+    ctx.registerBean("webHandler",WebHandler::class.java ,Supplier{webHandler})
+    return ctx
+}
+
 
 /**
  * 1. Dependencies
@@ -42,7 +85,10 @@ object LocalRepository : MessageRepository{
 
 /**
  * 2. Routing
- *  a) In Kotlin you need to explicitly say that given function is Functional Interface HandlerFunctional
+ *  a) Declare HandlerFunctions - Functions : Request -> ServerResponse
+ *   ** for more complex handler extract logic.
+ *
+ *
  *  b) So called "Functional API" uses WebFlux so you will see very often Mono or Flux which are async abstractions
  *  c) HandlerFunction is a function (Request) ->  Mono<Response> so you can retrieve all info about parameters or headers
  *  from the request
@@ -50,8 +96,12 @@ object LocalRepository : MessageRepository{
  *      To add more routes you just using chain calls "andRoute" or "andNest"
  */
 fun createJavaRouter(repo:MessageRepository) : RouterFunction<ServerResponse> {
+
+    //using java functional Interface
     val healthCheck: HandlerFunction<ServerResponse> =  HandlerFunction{ _ -> ServerResponse.noContent().build()}
 
+    //find(id) returns option
+    //syncBody returns finished Mono <-- reactor
     fun findMessage(id:Int): Mono<ServerResponse> =
         repo.find(id).fold(
                 ifEmpty = {ServerResponse.notFound().build()},
@@ -63,8 +113,9 @@ fun createJavaRouter(repo:MessageRepository) : RouterFunction<ServerResponse> {
         findMessage(id)
     }
 
-
-    return route(GET("/helloJava"),
+    //below and example of "ad hoc" route definition, and usage of previously defined handler functions
+    //This is Java native API, intuitive but cumbersome
+    return route(GET("/helloKotlin"),
             HandlerFunction{request -> ServerResponse.ok().body(Mono.just("Hello World from $request!"), String::class.java)}
     )
             .andRoute(GET("/healthcheck"),healthCheck)
@@ -75,30 +126,7 @@ fun createJavaRouter(repo:MessageRepository) : RouterFunction<ServerResponse> {
 enum class CustomScope { SINGLETON, PROTOTYPE }
 
 
-/**
- *  3. Context Initialization
- *      a) BeanDefinitionCustomizer can be passed during bean registration to set scope and other bean properties
- *      b) If we want to create instance by ourselves then we need to create Supplier
- *      c) We need to call "refresh" only once to activate bean factory
- *      d) To use webflux we need to convert our routing to WebHandler - there is ready to use static Method RouterFunctions.toWebHandler
- */
-fun createContext():ApplicationContext{
-    val ctx= GenericApplicationContext()
 
-    //Repository bean
-    val repositoryCustomizer = BeanDefinitionCustomizer { bd ->
-        bd.scope = CustomScope.SINGLETON.name.toLowerCase()
-    }
-    ctx.registerBean(MessageRepository::class.java, Supplier<MessageRepository> { LocalRepository } ,repositoryCustomizer)
-    ctx.refresh()
-
-    //Routing bean
-    val repo=ctx.getBean(MessageRepository::class.java)
-    val router: RouterFunction<ServerResponse> =createJavaRouter(repo)
-    val webHandler: WebHandler = RouterFunctions.toWebHandler(router)
-    ctx.registerBean("webHandler",WebHandler::class.java ,Supplier{webHandler})
-    return ctx
-}
 
 
 /**
@@ -111,7 +139,3 @@ fun startServer(ctx:ApplicationContext){
     server.startAndAwait(ReactorHttpHandlerAdapter(httpHandler))
 }
 
-fun main() {
-    val ctx= createContext()
-    startServer(ctx)
-}

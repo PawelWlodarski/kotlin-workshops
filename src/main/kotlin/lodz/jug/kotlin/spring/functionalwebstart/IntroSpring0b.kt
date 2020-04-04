@@ -12,8 +12,16 @@ import reactor.core.publisher.Mono
 import reactor.ipc.netty.http.server.HttpServer
 
 
+/**
+ * THIS IS AN EXAMPLE OF USING JAVA API IN KOTLIN.
+ * KOTLIN API IS IN IntroSpring0a
+ *
+ *
+ * KOTLIN SYNTAX FOR ROUTING IS EXPLAINED IN IntroSpring1 File
+ */
 fun createKotlinRouter(repo:MessageRepository) : RouterFunction<ServerResponse> {
 
+    //in kotlin API layer you don't need to specify HandlerFunction type, just write standard function
     val healthCheck: (ServerRequest) -> Mono<ServerResponse> =  {ServerResponse.noContent().build()}
 
     fun findMessage(id:Int): Mono<ServerResponse> =
@@ -22,12 +30,19 @@ fun createKotlinRouter(repo:MessageRepository) : RouterFunction<ServerResponse> 
                     ifSome = {message3 -> ServerResponse.ok().syncBody(message3)}
             )
 
+    //This is Kotlin native API, Short but uses some specific kotlin features
+    //no method chaining
+    //looks like standard config
     return router {
+        //ad hoc declaration
         GET("/helloKotlin"){ request ->
             ServerResponse.ok().body(Mono.just("Hello Kotlin from $request!"), String::class.java)
         }
 
+        //previously defined handler function
         GET("/healthcheck",healthCheck)
+
+        //it kotlin syntax
         GET("/users/{id}"){
             val id = it.pathVariable("id").toInt()
             findMessage(id)
@@ -36,10 +51,15 @@ fun createKotlinRouter(repo:MessageRepository) : RouterFunction<ServerResponse> 
 }
 
 
+
+
+//GenericApplicationContext uses "lambda with receiver"
+//beans is an independent dsl and can be moved outside GenericApplication context definition
 fun createContextWithDsl(): ApplicationContext  = GenericApplicationContext{
         beans {
             bean<MessageRepository>(scope = BeanDefinitionDsl.Scope.SINGLETON){LocalRepository}
             bean<WebHandler>("webHandler"){
+                //inline function with reified generics
                 val repo=ref<MessageRepository>()
                 RouterFunctions.toWebHandler(createKotlinRouter(repo))
             }
