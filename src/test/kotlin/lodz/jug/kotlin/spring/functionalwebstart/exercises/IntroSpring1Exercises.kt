@@ -3,7 +3,7 @@ package lodz.jug.kotlin.spring.functionalwebstart.exercises
 import io.kotlintest.shouldBe
 import lodz.jug.kotlin.spring.functionalwebstart.exercises.ArticleDsl.Companion.GENERIC_CONTENT
 import lodz.jug.kotlin.spring.functionalwebstart.exercises.ArticleDsl.Companion.GENERIC_TITLE
-import org.junit.jupiter.api.Test
+import org.junit.Test
 
 class IntroSpring1Exercises{
 
