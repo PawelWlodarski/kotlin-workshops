@@ -7,7 +7,12 @@ import lodz.jug.kotlin.spring.functionalwebstart.IntroSpring2.Response
 import lodz.jug.kotlin.spring.functionalwebstart.IntroSpring2.buildRoute2
 import lodz.jug.kotlin.spring.functionalwebstart.IntroSpring2.router2
 
-typealias ServerFunction2 = (IntroSpring2.Request) -> IntroSpring2.Response
+/**
+ * This file explains how routing dsl works
+ *
+ * exercises - IntroSpring2Exercises
+ */
+typealias ServerFunction2 = (IntroSpring2.Request) -> IntroSpring2.Response  //similar signature to  HandlerFunction
 
 fun main() {
     Displayer.header("spring preparation - CREATING ROUTES")
@@ -21,8 +26,15 @@ fun main() {
      * ServerHandler = (request) -> response
      * Routing = Map<request, ServerHandler>
      *
+     *  check: org.springframework.web.reactive.function.server.RouterFunctionDsl
+     *  check : RouterFunction
+     *      ** : Mono<HandlerFunction<T>> route(ServerRequest request);
+     *   check HandlerFunction
+     *   check: RouterFunctions.java
+     *    ** request predicates
      *
-     *
+     * FOR SIMPLE ROUTING EXAMPLE CHECK FunctionalWeb2 file
+     * FOR MORE COMPLEX ROUTING EXAMPLE CHECK FunctionalWebRouting file
      */
     val route1 =
             buildRoute2(GET("/hello")) { req ->
@@ -83,6 +95,7 @@ class RouterDsl2 {
     private var routes = emptyList<(Request) -> ServerFunction2>()
 
     /**
+     * LOCAL EXTENSION -> check "nest" method in spring API
      * This is very important part!
      * or is a LOCAL extension method wo String will have access to it only when called withing implicit 'this' scope
      */

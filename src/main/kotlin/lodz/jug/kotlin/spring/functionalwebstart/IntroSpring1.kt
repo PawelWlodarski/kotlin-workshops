@@ -3,7 +3,12 @@ package lodz.jug.kotlin.spring.functionalwebstart
 import lodz.jug.kotlin.Displayer
 
 @Suppress("MoveLambdaOutsideParentheses")
-// exercises - IntroSpring1Exercises
+/**
+ * This file explains how custom kotlin dsl syntax used for bean definition
+ * and routing is used
+ *
+ * exercises - IntroSpring1Exercises
+ */
 fun main() {
     Displayer.header("  SPRING PREPARATION - ROUTER DSL")
 

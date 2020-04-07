@@ -51,10 +51,13 @@ fun createKotlinRouter(repo:MessageRepository) : RouterFunction<ServerResponse> 
 }
 
 
-
-
-//GenericApplicationContext uses "lambda with receiver"
-//beans is an independent dsl and can be moved outside GenericApplication context definition
+/**
+ *
+ * GenericApplicationContext uses "lambda with receiver"
+ * beans is an independent dsl and can be moved outside GenericApplication context definition
+ *
+ * LOOK AT FILE IntroSpring1  TO UNDERSTAND THE SYNTAX
+ */
 fun createContextWithDsl(): ApplicationContext  = GenericApplicationContext{
         beans {
             bean<MessageRepository>(scope = BeanDefinitionDsl.Scope.SINGLETON){LocalRepository}
