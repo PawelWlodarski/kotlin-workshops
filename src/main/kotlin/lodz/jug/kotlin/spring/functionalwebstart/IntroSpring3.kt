@@ -9,6 +9,11 @@ import java.time.Duration
 import reactor.core.publisher.toMono
 
 
+/**
+ * This file explains Async constructions you came across when using WebFlux
+ *
+ * exercises - IntroSpring3Exercises
+ */
 typealias SyncFunction = (IntroSpring3.Request) -> IntroSpring3.Response
 typealias AsyncServerFunction3 = (IntroSpring3.Request) -> Mono<IntroSpring3.Response>
 

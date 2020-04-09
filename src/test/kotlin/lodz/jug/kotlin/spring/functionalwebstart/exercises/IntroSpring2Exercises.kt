@@ -58,6 +58,7 @@ class SimpleNewsDsl{
 
     private val articles = mutableMapOf<Tag,List<String>>()
 
+    //LOCAL EXTENSION!
     val String.tag:Tag
         get() = TODO("property getter for a tag")
 
